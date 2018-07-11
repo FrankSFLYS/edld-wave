@@ -15,5 +15,4 @@
 ---------------------------------------------------------------------------------------*/
 void DACStart();
 void ContinuesSend(unsigned char);
-//void SendNextData(unsigned char);
 #endif
