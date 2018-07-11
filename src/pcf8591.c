@@ -72,6 +72,14 @@ void DACStart() {
     Ack();
 }
 
+//void SendNextData(unsigned char data) {
+    // #pragma asm
+    //     IMPORT data
+    //     MOV     R0, data
+
+    // #pragma endsam
+//}
+
 void ContinuesSend(unsigned char Data) {
     Send(Data);
     Ack();

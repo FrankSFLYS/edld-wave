@@ -1,19 +1,19 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        07/11/2018  16:33:56  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        07/11/2018  18:15:50  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
-G:\KEIL\K4\C51\BIN\BL51.EXE key.obj, main.obj, pcf8591.obj, timer.obj, delay.obj TO prj RAMSIZE (256)
+G:\KEIL\K4\C51\BIN\BL51.EXE delay.obj, key.obj, main.obj, pcf8591.obj, timer.obj TO edld-wave RAMSIZE (256)
 
 
 MEMORY MODEL: SMALL WITH FLOATING POINT ARITHMETIC
 
 
 INPUT MODULES INCLUDED:
+  delay.obj (DELAY)
   key.obj (KEY)
   main.obj (MAIN)
   pcf8591.obj (PCF8591)
   timer.obj (TIMER)
-  delay.obj (DELAY)
   G:\KEIL\K4\C51\LIB\C51FPS.LIB (?C?FPADD)
   G:\KEIL\K4\C51\LIB\C51FPS.LIB (?C?FPMUL)
   G:\KEIL\K4\C51\LIB\C51FPS.LIB (?C?FPDIV)
@@ -31,7 +31,7 @@ INPUT MODULES INCLUDED:
   G:\KEIL\K4\C51\LIB\C51S.LIB (?C?ULDIV)
 
 
-LINK MAP OF MODULE:  prj (KEY)
+LINK MAP OF MODULE:  edld-wave (DELAY)
 
 
             TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
@@ -40,8 +40,8 @@ LINK MAP OF MODULE:  prj (KEY)
             * * * * * * *   D A T A   M E M O R Y   * * * * * * *
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
             DATA    0008H     0050H     UNIT         ?DT?MAIN
-            DATA    0058H     0002H     UNIT         ?DT?KEY
-            DATA    005AH     0002H     UNIT         ?DT?DELAY
+            DATA    0058H     0002H     UNIT         ?DT?DELAY
+            DATA    005AH     0002H     UNIT         ?DT?KEY
             IDATA   005CH     0001H     UNIT         ?STACK
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
@@ -59,7 +59,7 @@ LINK MAP OF MODULE:  prj (KEY)
             CODE    11A9H     004DH     UNIT         ?PR?GENSAW?MAIN
             CODE    11F6H     0045H     UNIT         ?PR?GENSIN?MAIN
             CODE    123BH     0044H     UNIT         ?C?LDIV
-BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  16:33:56  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:15:50  PAGE 2
 
 
             CODE    127FH     0042H     UNIT         ?PR?GENSQR?MAIN
@@ -74,7 +74,7 @@ LINK MAP OF MODULE:  prj (KEY)
 
 
 
-OVERLAY MAP OF MODULE:   prj (KEY)
+OVERLAY MAP OF MODULE:   edld-wave (DELAY)
 
 
 SEGMENT
@@ -116,22 +116,36 @@ SEGMENT
 
 
 
-SYMBOL TABLE OF MODULE:  prj (KEY)
+SYMBOL TABLE OF MODULE:  edld-wave (DELAY)
 
   VALUE           TYPE          NAME
-BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  16:33:56  PAGE 3
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:15:50  PAGE 3
 
 
   ----------------------------------
+
+  -------         MODULE        DELAY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0058H         PUBLIC        __j_
+  D:0059H         PUBLIC        __k_
+  C:1302H         PUBLIC        _delay
+  -------         PROC          _DELAY
+  D:0007H         SYMBOL        i
+  C:1302H         LINE#         6
+  C:1302H         LINE#         7
+  C:130BH         LINE#         8
+  C:1315H         LINE#         9
+  -------         ENDPROC       _DELAY
+  -------         ENDMOD        DELAY
 
   -------         MODULE        KEY
   C:0000H         SYMBOL        _ICE_DUMMY_
   D:0090H         PUBLIC        P1
   D:00B0H         PUBLIC        P3
-  D:0058H         PUBLIC        _KEY_H_temp
+  D:005AH         PUBLIC        _KEY_H_temp
   D:00A8H         PUBLIC        IE
   D:00B8H         PUBLIC        IP
-  D:0059H         PUBLIC        _KEY_H_key
+  D:005BH         PUBLIC        _KEY_H_key
   C:0E7EH         PUBLIC        mKeyScan
   D:0098H         PUBLIC        SCON
   D:0088H         PUBLIC        TCON
@@ -165,6 +179,9 @@ SYMBOL TABLE OF MODULE:  prj (KEY)
   C:0ED9H         LINE#         48
   C:0EDFH         LINE#         49
   C:0EE4H         LINE#         50
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:15:50  PAGE 4
+
+
   C:0EEAH         LINE#         51
   C:0EEDH         LINE#         52
   C:0EFFH         LINE#         53
@@ -179,9 +196,6 @@ SYMBOL TABLE OF MODULE:  prj (KEY)
   C:0F1FH         LINE#         62
   C:0F1FH         LINE#         63
   C:0F1FH         LINE#         64
-BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  16:33:56  PAGE 4
-
-
   C:0F22H         LINE#         65
   C:0F25H         LINE#         66
   C:0F28H         LINE#         67
@@ -225,6 +239,9 @@ SYMBOL TABLE OF MODULE:  prj (KEY)
   -------         ENDMOD        KEY
 
   -------         MODULE        MAIN
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:15:50  PAGE 5
+
+
   C:0000H         SYMBOL        _ICE_DUMMY_
   D:0090H         PUBLIC        P1
   D:00B0H         PUBLIC        P3
@@ -239,9 +256,6 @@ SYMBOL TABLE OF MODULE:  prj (KEY)
   D:0009H         PUBLIC        initValue
   D:000BH         PUBLIC        generater
   D:000EH         PUBLIC        keyCode
-BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  16:33:56  PAGE 5
-
-
   D:000FH         PUBLIC        sin
   D:002FH         PUBLIC        waveForm
   D:008CH         PUBLIC        TH0
@@ -285,6 +299,9 @@ SYMBOL TABLE OF MODULE:  prj (KEY)
   C:0D28H         LINE#         83
   C:0D31H         LINE#         84
   C:0D34H         LINE#         85
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:15:50  PAGE 6
+
+
   C:0D34H         LINE#         86
   C:0D3DH         LINE#         87
   C:0D3FH         LINE#         88
@@ -299,9 +316,6 @@ SYMBOL TABLE OF MODULE:  prj (KEY)
   C:0D52H         LINE#         97
   C:0D52H         LINE#         98
   C:0D5AH         LINE#         99
-BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  16:33:56  PAGE 6
-
-
   C:0D5CH         LINE#         100
   C:0D5CH         LINE#         101
   C:0D67H         LINE#         102
@@ -345,6 +359,9 @@ SYMBOL TABLE OF MODULE:  prj (KEY)
   C:117CH         LINE#         140
   C:1181H         LINE#         141
   C:1184H         LINE#         142
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:15:50  PAGE 7
+
+
   C:1184H         LINE#         143
   C:118EH         LINE#         144
   -------         ENDPROC       ONTIMER0
@@ -359,9 +376,6 @@ SYMBOL TABLE OF MODULE:  prj (KEY)
   C:11F6H         LINE#         152
   C:11F6H         LINE#         153
   C:11F9H         LINE#         154
-BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  16:33:56  PAGE 7
-
-
   C:1233H         LINE#         155
   C:123AH         LINE#         156
   -------         ENDPROC       GENSIN
@@ -405,6 +419,9 @@ SYMBOL TABLE OF MODULE:  prj (KEY)
   C:1316H         PUBLIC        DACStart
   D:00C8H         PUBLIC        T2CON
   D:00D0H         PUBLIC        PSW
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:15:50  PAGE 8
+
+
   -------         PROC          START
   C:133BH         LINE#         18
   C:133BH         LINE#         19
@@ -419,9 +436,6 @@ SYMBOL TABLE OF MODULE:  prj (KEY)
   -------         ENDPROC       START
   -------         PROC          ACK
   C:1347H         LINE#         32
-BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  16:33:56  PAGE 8
-
-
   C:1347H         LINE#         33
   C:1347H         LINE#         34
   C:1349H         LINE#         35
@@ -465,9 +479,12 @@ SYMBOL TABLE OF MODULE:  prj (KEY)
   -------         ENDPROC       DACSTART
   -------         PROC          _CONTINUESSEND
   D:0007H         SYMBOL        Data
-  C:1351H         LINE#         75
-  C:1351H         LINE#         76
-  C:1354H         LINE#         77
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:15:50  PAGE 9
+
+
+  C:1351H         LINE#         83
+  C:1351H         LINE#         84
+  C:1354H         LINE#         85
   -------         ENDPROC       _CONTINUESSEND
   -------         ENDMOD        PCF8591
 
@@ -479,9 +496,6 @@ SYMBOL TABLE OF MODULE:  prj (KEY)
   D:00A8H         PUBLIC        IE
   D:00B8H         PUBLIC        IP
   C:1329H         PUBLIC        Init_Timer0
-BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  16:33:56  PAGE 9
-
-
   D:0098H         PUBLIC        SCON
   D:0089H         PUBLIC        TMOD
   D:0088H         PUBLIC        TCON
@@ -505,20 +519,6 @@ SYMBOL TABLE OF MODULE:  prj (KEY)
   -------         ENDPROC       INIT_TIMER0
   -------         ENDMOD        TIMER
 
-  -------         MODULE        DELAY
-  C:0000H         SYMBOL        _ICE_DUMMY_
-  D:005AH         PUBLIC        __j_
-  D:005BH         PUBLIC        __k_
-  C:1302H         PUBLIC        _delay
-  -------         PROC          _DELAY
-  D:0007H         SYMBOL        i
-  C:1302H         LINE#         6
-  C:1302H         LINE#         7
-  C:130BH         LINE#         8
-  C:1315H         LINE#         9
-  -------         ENDPROC       _DELAY
-  -------         ENDMOD        DELAY
-
   -------         MODULE        ?C?FPADD
   C:0807H         PUBLIC        ?C?FPADD
   C:0803H         PUBLIC        ?C?FPSUB
@@ -539,7 +539,7 @@ SYMBOL TABLE OF MODULE:  prj (KEY)
 
   -------         MODULE        ?C?FCAST
   C:0B15H         PUBLIC        ?C?FCASTC
-BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  16:33:56  PAGE 10
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:15:50  PAGE 10
 
 
   C:0B10H         PUBLIC        ?C?FCASTI
