@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        07/11/2018  18:18:48  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        07/11/2018  18:59:32  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
@@ -59,7 +59,7 @@ LINK MAP OF MODULE:  edld-wave (DELAY)
             CODE    11A9H     004DH     UNIT         ?PR?GENSAW?MAIN
             CODE    11F6H     0045H     UNIT         ?PR?GENSIN?MAIN
             CODE    123BH     0044H     UNIT         ?C?LDIV
-BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:18:48  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:59:32  PAGE 2
 
 
             CODE    127FH     0042H     UNIT         ?PR?GENSQR?MAIN
@@ -70,8 +70,7 @@ LINK MAP OF MODULE:  edld-wave (DELAY)
             CODE    1329H     0012H     UNIT         ?PR?INIT_TIMER0?TIMER
             CODE    133BH     000CH     UNIT         ?PR?START?PCF8591
             CODE    1347H     000AH     UNIT         ?PR?ACK?PCF8591
-            CODE    1351H     0006H     UNIT         ?PR?_SENDNEXTDATA?PCF8591
-            CODE    1357H     0006H     UNIT         ?PR?_CONTINUESSEND?PCF8591
+            CODE    1351H     0006H     UNIT         ?PR?_CONTINUESSEND?PCF8591
 
 
 
@@ -119,10 +118,10 @@ SEGMENT
 
 SYMBOL TABLE OF MODULE:  edld-wave (DELAY)
 
-BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:18:48  PAGE 3
-
-
   VALUE           TYPE          NAME
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:59:32  PAGE 3
+
+
   ----------------------------------
 
   -------         MODULE        DELAY
@@ -179,10 +178,10 @@ SYMBOL TABLE OF MODULE:  edld-wave (DELAY)
   C:0ED6H         LINE#         47
   C:0ED9H         LINE#         48
   C:0EDFH         LINE#         49
-BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:18:48  PAGE 4
-
-
   C:0EE4H         LINE#         50
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:59:32  PAGE 4
+
+
   C:0EEAH         LINE#         51
   C:0EEDH         LINE#         52
   C:0EFFH         LINE#         53
@@ -239,10 +238,10 @@ SYMBOL TABLE OF MODULE:  edld-wave (DELAY)
   -------         ENDPROC       MKEYSCAN
   -------         ENDMOD        KEY
 
-BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:18:48  PAGE 5
-
-
   -------         MODULE        MAIN
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:59:32  PAGE 5
+
+
   C:0000H         SYMBOL        _ICE_DUMMY_
   D:0090H         PUBLIC        P1
   D:00B0H         PUBLIC        P3
@@ -299,10 +298,10 @@ SYMBOL TABLE OF MODULE:  edld-wave (DELAY)
   C:0D28H         LINE#         82
   C:0D28H         LINE#         83
   C:0D31H         LINE#         84
-BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:18:48  PAGE 6
-
-
   C:0D34H         LINE#         85
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:59:32  PAGE 6
+
+
   C:0D34H         LINE#         86
   C:0D3DH         LINE#         87
   C:0D3FH         LINE#         88
@@ -359,10 +358,10 @@ SYMBOL TABLE OF MODULE:  edld-wave (DELAY)
   C:117AH         LINE#         139
   C:117CH         LINE#         140
   C:1181H         LINE#         141
-BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:18:48  PAGE 7
-
-
   C:1184H         LINE#         142
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:59:32  PAGE 7
+
+
   C:1184H         LINE#         143
   C:118EH         LINE#         144
   -------         ENDPROC       ONTIMER0
@@ -414,16 +413,15 @@ SYMBOL TABLE OF MODULE:  edld-wave (DELAY)
   B:00A0H.0       PUBLIC        Sda
   D:00B8H         PUBLIC        IP
   B:00A0H.1       PUBLIC        Scl
-  C:1351H         PUBLIC        _SendNextData
   D:0098H         PUBLIC        SCON
   D:0088H         PUBLIC        TCON
-  C:1357H         PUBLIC        _ContinuesSend
+  C:1351H         PUBLIC        _ContinuesSend
   C:1316H         PUBLIC        DACStart
-BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:18:48  PAGE 8
-
-
   D:00C8H         PUBLIC        T2CON
   D:00D0H         PUBLIC        PSW
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:59:32  PAGE 8
+
+
   -------         PROC          START
   C:133BH         LINE#         18
   C:133BH         LINE#         19
@@ -479,20 +477,14 @@ SYMBOL TABLE OF MODULE:  edld-wave (DELAY)
   C:1321H         LINE#         71
   C:1326H         LINE#         72
   -------         ENDPROC       DACSTART
-BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:18:48  PAGE 9
-
-
-  -------         PROC          _SENDNEXTDATA
+  -------         PROC          _CONTINUESSEND
   D:0007H         SYMBOL        Data
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:59:32  PAGE 9
+
+
   C:1351H         LINE#         75
   C:1351H         LINE#         76
   C:1354H         LINE#         77
-  -------         ENDPROC       _SENDNEXTDATA
-  -------         PROC          _CONTINUESSEND
-  D:0007H         SYMBOL        Data
-  C:1357H         LINE#         85
-  C:1357H         LINE#         86
-  C:135AH         LINE#         87
   -------         ENDPROC       _CONTINUESSEND
   -------         ENDMOD        PCF8591
 
@@ -539,9 +531,6 @@ SYMBOL TABLE OF MODULE:  edld-wave (DELAY)
   -------         MODULE        ?C?FPDIV
   C:0A01H         PUBLIC        ?C?FPDIV
   -------         ENDMOD        ?C?FPDIV
-BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:18:48  PAGE 10
-
-
 
   -------         MODULE        ?C?FPCMP
   C:0AA0H         PUBLIC        ?C?FPCMP
@@ -550,6 +539,9 @@ SYMBOL TABLE OF MODULE:  edld-wave (DELAY)
 
   -------         MODULE        ?C?FCAST
   C:0B15H         PUBLIC        ?C?FCASTC
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/11/2018  18:59:32  PAGE 10
+
+
   C:0B10H         PUBLIC        ?C?FCASTI
   C:0B0BH         PUBLIC        ?C?FCASTL
   -------         ENDMOD        ?C?FCAST
@@ -583,12 +575,9 @@ SYMBOL TABLE OF MODULE:  edld-wave (DELAY)
   C:0C42H         PUBLIC        ?C?ULDIV
   -------         ENDMOD        ?C?ULDIV
 
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SENDNEXTDATA?PCF8591
-
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 05BBH BYTE (71%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 05B5H BYTE (71%) *
 ******************************************************************************
 
-Program Size: data=93.0 xdata=0 code=2915
-LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)
+Program Size: data=93.0 xdata=0 code=2909
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -6,7 +6,7 @@ File target: STC89C52 with PCF8591 ADDA Converter
 Approach  : To generate a series of waves including sin(SIN),
 triangle(TRI), sawtooth(SAW), square(SQR) whose amplitude and their
 frequency can be adjusted by pressing keys. Details can be found at
-http://frank.xin/edld
+http://frank.xin
 **********************************************************************/
 #include <reg52.h>
 #include <intrins.h>
@@ -172,3 +172,5 @@ void genTri() {
         waveForm[i] = 255*(voltage/MAX_VOLT) - waveForm[i - WAVE_SIZE/2];
     }
 }
+
+

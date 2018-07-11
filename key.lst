@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   KEY                                                                   07/11/2018 18:21:46 PAGE 1   
+C51 COMPILER V9.01   KEY                                                                   07/11/2018 18:59:31 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE KEY
@@ -62,7 +62,7 @@ line level    source
   53   4                              case 0xed: _KEY_H_key = KEY_FRE_R_ADD; break;
   54   4                              case 0xdd: _KEY_H_key = KEY_FRE_A_ADD; break;
   55   4                              case 0xbd: _KEY_H_key = KEY_AMP_R_ADD; break;
-C51 COMPILER V9.01   KEY                                                                   07/11/2018 18:21:46 PAGE 2   
+C51 COMPILER V9.01   KEY                                                                   07/11/2018 18:59:31 PAGE 2   
 
   56   4                              case 0x7d: _KEY_H_key = KEY_AMP_A_ADD; break;
   57   4                              } 
@@ -126,7 +126,7 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    PDATA SIZE       =   ----    ----
    DATA SIZE        =      2    ----
    IDATA SIZE       =   ----    ----
-C51 COMPILER V9.01   KEY                                                                   07/11/2018 18:21:46 PAGE 3   
+C51 COMPILER V9.01   KEY                                                                   07/11/2018 18:59:31 PAGE 3   
 
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
