@@ -1,0 +1,7 @@
+"key.obj",
+"main.obj",
+"pcf8591.obj",
+"timer.obj",
+"delay.obj" 
+TO "prj" 
+RAMSIZE(256) 

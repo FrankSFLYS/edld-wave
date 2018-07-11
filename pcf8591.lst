@@ -1,0 +1,106 @@
+C51 COMPILER V9.01   PCF8591                                                               07/11/2018 16:33:55 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE PCF8591
+OBJECT MODULE PLACED IN pcf8591.obj
+COMPILER INVOKED BY: G:\Keil\k4\C51\BIN\C51.EXE src\pcf8591.c BROWSE DEBUG OBJECTEXTEND PRINT(.\pcf8591.lst) OBJECT(pcf8
+                    -591.obj)
+
+line level    source
+
+   1          /********引用的头文件*******/
+   2          #include <reg52.h> //开发51单片机必须包含的头文件,该文件定义了89c52单片机内部寄�
+             -�器的地址
+   3          #include "pcf8591.h" //pcf8591.h文件声明了pcf8591.c文件里边的操作函数,如果主函数要调�
+             -��操作函数,则需包含此头文件
+   4          #include <intrins.h> //包含NOP空指令函数_nop_();
+   5          /***********宏定义**********/
+   6          #define uchar unsigned char
+   7          #define uint  unsigned int
+   8          #define AddWr 0x90   //写数据地址 
+   9          #define AddRd 0x91   //读数据地址
+  10          
+  11          /********硬件接口定义*******/
+  12          sbit     Sda=P2^0;      //I2C  时钟 
+  13          sbit     Scl=P2^1;      //I2C  数据 
+  14          
+  15          /*------------------------------------------------
+  16                              启动IIC总线
+  17          ------------------------------------------------*/
+  18          void Start(void)
+  19          {
+  20   1          Sda=1;
+  21   1          _nop_();
+  22   1          Scl=1;
+  23   1          _nop_();
+  24   1          Sda=0;
+  25   1          _nop_();
+  26   1          Scl=0;
+  27   1      }
+  28          
+  29          /*------------------------------------------------
+  30                             应答IIC总线
+  31          ------------------------------------------------*/
+  32          void Ack(void)
+  33          {
+  34   1          Sda=0;
+  35   1          _nop_();
+  36   1          Scl=1;
+  37   1          _nop_();
+  38   1          Scl=0;
+  39   1          _nop_();
+  40   1      }
+  41          
+  42          /*------------------------------------------------
+  43                        发送一个字节
+  44          ------------------------------------------------*/
+  45          void Send(unsigned char Data)
+  46          { 
+  47   1          unsigned char BitCounter=8;
+  48   1          unsigned char temp;
+  49   1      
+  50   1          do {
+  51   2              temp=Data;
+  52   2              Scl=0;
+C51 COMPILER V9.01   PCF8591                                                               07/11/2018 16:33:55 PAGE 2   
+
+  53   2              _nop_();
+  54   2              if((temp&0x80)==0x80)
+  55   2                  Sda=1;
+  56   2              else
+  57   2                  Sda=0;
+  58   2      
+  59   2              Scl=1;
+  60   2              temp=Data<<1;
+  61   2              Data=temp;
+  62   2              BitCounter--;
+  63   2          } while(BitCounter);
+  64   1          Scl=0;
+  65   1      }
+  66          
+  67          void DACStart() {
+  68   1          Start();
+  69   1          Send(AddWr); //写入芯片地址
+  70   1          Ack();
+  71   1          Send(0x40);  //写入控制位，使能DAC输出
+  72   1          Ack();
+  73   1      }
+  74          
+  75          void ContinuesSend(unsigned char Data) {
+  76   1          Send(Data);
+  77   1          Ack();
+  78   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     76    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
