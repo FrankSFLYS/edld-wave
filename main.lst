@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   MAIN                                                                  07/11/2018 18:59:31 PAGE 1   
+C51 COMPILER V9.01   MAIN                                                                  07/11/2018 20:04:02 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
@@ -23,175 +23,229 @@ line level    source
   14          #include "key.h"
   15          #include "pcf8591.h"
   16          
-  17          #define MODE_SIN KEY_SIN
-  18          #define MODE_TRI KEY_TRI
-  19          #define MODE_SAW KEY_SAW
-  20          #define MODE_SQR KEY_SQR
-  21          #define WAVE_SIZE 32
-  22          #define MAX_VOLT ((float)5.0)
+  17          // size of wave form array
+  18          // also used in calculating waves
+  19          #define WAVE_SIZE 32
+  20          // maximum voltage output
+  21          #define MAX_VOLT ((float)5.0)
+  22          // default timer reloading value
   23          #define DEFAULT_TL (65536-251)%256
   24          #define DEFAULT_TH (65536-251)/256
-  25          #define FREQUENCY_STEP_R 28
-  26          #define FREQUENCY_STEP_A 7
-  27          
-  28          // Generate sin waveForm
-  29          void genSin();
-  30          // Generate Triangle waveForm
-  31          void genTri();
-  32          // Generate Sawtooth waveForm
-  33          void genSaw();
-  34          // Generate Square waveForm
-  35          void genSqr();
-  36          
-  37          // index of indexing waveForm
-  38          unsigned char index;
-  39          
-  40          unsigned char i;
-  41          unsigned char keyCode;
-  42          unsigned int initValue;
-  43          unsigned int tlValue, thValue;
-  44          float voltage;
-  45          
-  46          void (*generater)(void);
-  47          
-  48          // Table of sin wave
-  49          unsigned char sin[] = {
-  50              //128,176,218,245,255,245,218,176,128,79,37,10,0,10,37,79
-  51              128, 152, 176, 198, 218, 234, 245, 253,
-  52              255, 253, 245, 234, 218, 198, 176, 152,
-  53              128, 103,  79,  57,  37,  21,  10,   2,  
-  54                0,   2,  10,  21,  37,  57,  79, 103
-  55          };
-C51 COMPILER V9.01   MAIN                                                                  07/11/2018 18:59:31 PAGE 2   
+  25          // step when changing frequency, R for Rough, A for Accurate
+  26          // (Tested) Rough changes about 20Hz a time
+  27          // Accurate changes about 1Hz a time
+  28          // THE FREQUENCY CHANGING IS NON-LINEAR BUT
+  29          // THERE IS NO SOLUTION PROVIDED IN THIS ALGORITHM
+  30          #define FREQUENCY_STEP_R 28
+  31          #define FREQUENCY_STEP_A 7
+  32          
+  33          // Generate sin waveForm
+  34          void genSin();
+  35          // Generate Triangle waveForm
+  36          void genTri();
+  37          // Generate Sawtooth waveForm
+  38          void genSaw();
+  39          // Generate Square waveForm
+  40          void genSqr();
+  41          
+  42          // index of indexing waveForm
+  43          unsigned char index;
+  44          // used in for loops
+  45          unsigned char i;
+  46          // storing keycode
+  47          unsigned char keyCode;
+  48          // initValue of Timer
+  49          unsigned int initValue;
+  50          // reloading value of TH and TL
+  51          unsigned int tlValue, thValue;
+  52          // output voltage, modified by key pressing
+  53          float voltage;
+  54          // function pointer, point to genWaves(), for brief calling
+  55          void (*generater)(void);
+C51 COMPILER V9.01   MAIN                                                                  07/11/2018 20:04:02 PAGE 2   
 
   56          
-  57          volatile unsigned char waveForm[WAVE_SIZE];
-  58          
-  59          void init() {
-  60   1          Init_Timer0();
-  61   1          DACStart();
-  62   1          P1 = 0xfe;
-  63   1          voltage = 5.0;
-  64   1          initValue = 251;
-  65   1          tlValue = (65536-initValue)%256;
-  66   1          thValue = (65536-initValue)/256;
-  67   1          generater = genSin;
-  68   1          generater();
-  69   1      }
-  70          void main() {
-  71   1          init();
-  72   1          while(1) {
-  73   2              keyCode = mKeyScan();
-  74   2              switch(keyCode) {
-  75   3                  case KEY_NULL:
-  76   3                      break;
-  77   3                  case KEY_ONOFF:
-  78   3                      break;
-  79   3                  case KEY_SIN:
-  80   3                      generater = genSin;
-  81   3                      break;
-  82   3                  case KEY_SQR:
-  83   3                      generater = genSqr;
-  84   3                      break;
-  85   3                  case KEY_SAW:
-  86   3                      generater = genSaw;
-  87   3                      break;
-  88   3                  case KEY_TRI:
-  89   3                      generater = genTri;
-  90   3                      break;
-  91   3                  case KEY_FRE_R_ADD:
-  92   3                      initValue -= FREQUENCY_STEP_R;
-  93   3                      break;
-  94   3                  case KEY_FRE_R_SUB:
-  95   3                      initValue += FREQUENCY_STEP_R;
-  96   3                      break;
-  97   3                  case KEY_FRE_A_ADD:
-  98   3                      initValue -= FREQUENCY_STEP_A;
-  99   3                      break;
- 100   3                  case KEY_FRE_A_SUB:
- 101   3                      initValue += FREQUENCY_STEP_A;
- 102   3                      break;
- 103   3                  case KEY_AMP_R_ADD:
- 104   3                      voltage += 0.1;
- 105   3                      break;
- 106   3                  case KEY_AMP_R_SUB:
- 107   3                      voltage -= 0.1;
- 108   3                      break;
- 109   3                  case KEY_AMP_A_ADD:
- 110   3                      voltage += 0.01;
- 111   3                      break;
- 112   3                  case KEY_AMP_A_SUB:
- 113   3                      voltage -= 0.01;
- 114   3                      break;
- 115   3                  default:
- 116   3                      break;
- 117   3              }
-C51 COMPILER V9.01   MAIN                                                                  07/11/2018 18:59:31 PAGE 3   
+  57          // Table of sin wave
+  58          unsigned char sin[] = {
+  59              // Uncomment this line below when WAVE_SIZE==16
+  60              //128,176,218,245,255,245,218,176,128,79,37,10,0,10,37,79
+  61              // Comment the lines below when WAVE_SIZE==16
+  62              128, 152, 176, 198, 218, 234, 245, 253,
+  63              255, 253, 245, 234, 218, 198, 176, 152,
+  64              128, 103,  79,  57,  37,  21,  10,   2,  
+  65                0,   2,  10,  21,  37,  57,  79, 103
+  66          };
+  67          // Table of LUT, recalculated whenever a loop in main()
+  68          volatile unsigned char waveForm[WAVE_SIZE];
+  69          
+  70          /*
+  71           * Initialization
+  72           * This function is for global usage
+  73           * Initialize these things:
+  74           * Timer0, DA, P1(for showing status of program)
+  75           * voltage, initValue(used in Timer0, for reloaing values)
+  76           * tlValue & thValue (calculated initValue, for reloading values in Timer 0)
+  77           * generater (function pointer, for calculating waveForm[])
+  78           */
+  79          void init() {
+  80   1          Init_Timer0();      // Enable Interrupt
+  81   1          DACStart();         // Send the ADDRESS and CONTROL bytes to PCF8591
+  82   1          P1 = 0xfe;          // Light on LED 0
+  83   1          voltage = 5.0;      // Maximum initial voltage output
+  84   1          initValue = 251;    // (Tested) Under this value, the frequency is 100Hz
+  85   1          tlValue = (65536-initValue)%256; // Reloading value of Timer
+  86   1          thValue = (65536-initValue)/256; // Reloading value of Timer
+  87   1          generater = genSin; // Function pointer pointing to genSin()
+  88   1          generater();        // Call function pointer (genSin() here)
+  89   1      }
+  90          // main entrance
+  91          void main() {
+  92   1          init();         // Initialize things
+  93   1          // main loop
+  94   1          while(1) {
+  95   2              keyCode = mKeyScan();   // Get key press info
+  96   2              switch(keyCode) {
+  97   3                  case KEY_NULL:      // No key pressed (or invalied key)
+  98   3                      break;
+  99   3                  case KEY_ONOFF:     // Display controlling (not used)
+ 100   3                      break;
+ 101   3                  case KEY_SIN:       // Switch to sin wave
+ 102   3                      generater = genSin; // Function pointer, ready to call
+ 103   3                      break;
+ 104   3                  case KEY_SQR:       // Switch to square wave
+ 105   3                      generater = genSqr;
+ 106   3                      break;
+ 107   3                  case KEY_SAW:       // Switch to sawtooth wave
+ 108   3                      generater = genSaw;
+ 109   3                      break;
+ 110   3                  case KEY_TRI:       // Switch to triangle wave
+ 111   3                      generater = genTri;
+ 112   3                      break;
+ 113   3                  case KEY_FRE_R_ADD: // Rough add frequency
+ 114   3                      initValue -= FREQUENCY_STEP_R; // that is, sub of delay
+ 115   3                      break;
+ 116   3                  case KEY_FRE_R_SUB: // Rough sub frequency
+ 117   3                      initValue += FREQUENCY_STEP_R;
+C51 COMPILER V9.01   MAIN                                                                  07/11/2018 20:04:02 PAGE 3   
 
- 118   2              if(voltage < 0) {
- 119   3                  voltage = 0.1;
- 120   3              }
- 121   2              if(voltage > 5.0) {
- 122   3                  voltage = 5.0;
- 123   3              }
- 124   2              if(initValue < 251) {
- 125   3                  initValue = 251;
- 126   3              }
- 127   2              if(initValue > 65534) {
- 128   3                  initValue = 65534;
- 129   3              }
- 130   2              tlValue = (65536-initValue)%256;
- 131   2              thValue = (65536-initValue)/256;
- 132   2              generater();
- 133   2          }
- 134   1      }
- 135          
- 136          void onTimer0() interrupt 1 {
- 137   1              TL0 = tlValue;   // 200 Hz for sin wave
- 138   1              TH0 = thValue;   // 200 Hz for sin wave
- 139   1          index ++;
- 140   1          if(index == WAVE_SIZE) {
- 141   2              index = 0;
- 142   2          }
- 143   1          ContinuesSend(waveForm[index]);
- 144   1      }
- 145          
- 146          void genSaw() {
- 147   1          for(i = 0; i < WAVE_SIZE; i++) {
- 148   2              waveForm[i] = i*(255/WAVE_SIZE)*(voltage/MAX_VOLT);
- 149   2          }
- 150   1      }
- 151          
- 152          void genSin() {
- 153   1          for(i = 0; i < WAVE_SIZE; i++) {
- 154   2              waveForm[i] = sin[i]*(voltage/MAX_VOLT);
- 155   2          }
- 156   1      }
- 157          
- 158          void genSqr() {
- 159   1          for(i = 0; i < WAVE_SIZE/2; i++) {
- 160   2              waveForm[i] = (255)*(voltage/MAX_VOLT);
- 161   2          }
- 162   1          for(i = WAVE_SIZE/2; i < WAVE_SIZE; i++) {
- 163   2              waveForm[i] = 0;
- 164   2          }
- 165   1      }
- 166          
- 167          void genTri() {
- 168   1          for(i = 0; i < WAVE_SIZE/2; i++) {
- 169   2              waveForm[i] = (WAVE_SIZE/2 + i*(255/WAVE_SIZE*2))*(voltage/MAX_VOLT);
- 170   2          }
- 171   1          for(i = WAVE_SIZE/2; i < WAVE_SIZE; i++) {
- 172   2              waveForm[i] = 255*(voltage/MAX_VOLT) - waveForm[i - WAVE_SIZE/2];
- 173   2          }
+ 118   3                      break;
+ 119   3                  case KEY_FRE_A_ADD: // Accurate add frequency
+ 120   3                      initValue -= FREQUENCY_STEP_A;
+ 121   3                      break;
+ 122   3                  case KEY_FRE_A_SUB:
+ 123   3                      initValue += FREQUENCY_STEP_A;
+ 124   3                      break;
+ 125   3                  case KEY_AMP_R_ADD: // Rough add amplitude (output voltage)
+ 126   3                      voltage += 0.1;
+ 127   3                      break;
+ 128   3                  case KEY_AMP_R_SUB:
+ 129   3                      voltage -= 0.1;
+ 130   3                      break;
+ 131   3                  case KEY_AMP_A_ADD:
+ 132   3                      voltage += 0.01;
+ 133   3                      break;
+ 134   3                  case KEY_AMP_A_SUB:
+ 135   3                      voltage -= 0.01;
+ 136   3                      break;
+ 137   3                  default:
+ 138   3                      break;
+ 139   3              }
+ 140   2              if(voltage < 0) {   // Voltage range: 0~5V
+ 141   3                  voltage = 0.1;
+ 142   3              }
+ 143   2              if(voltage > 5.0) {
+ 144   3                  voltage = 5.0;
+ 145   3              }
+ 146   2              if(initValue < 251) { // Timer should be no faster than this 
+ 147   3                  initValue = 251;  // or DAC would not run normally
+ 148   3              }
+ 149   2              if(initValue > 65534) { // 65535 is the maximum value of timer
+ 150   3                  initValue = 65534;
+ 151   3              }
+ 152   2              tlValue = (65536-initValue)%256;    // Recalculate timer reloading values
+ 153   2              thValue = (65536-initValue)/256;
+ 154   2              
+ 155   2              generater();   // Regenerate wave form (calculates even if nothing changes)
+ 156   2          }
+ 157   1      }
+ 158          
+ 159          void onTimer0() interrupt 1 {
+ 160   1              TL0 = tlValue;   // Reload timer values
+ 161   1              TH0 = thValue;   // Reload timer values
+ 162   1      
+ 163   1          index ++;   // Increase index, indexing next element in waveForm[]
+ 164   1          if(index == WAVE_SIZE) {    // Array out range
+ 165   2              index = 0;
+ 166   2          }
+ 167   1          /*
+ 168   1           * Send next data into DAC
+ 169   1           * Connection already set up by calling DACStart()
+ 170   1           * According to documentation, there can be unlimited
+ 171   1           * data sent to DAC
+ 172   1           */
+ 173   1          ContinuesSend(waveForm[index]);
  174   1      }
+ 175          
+ 176          /*
+ 177           * Generating sawtooth wave
+ 178           * Sawtooth wave increases in all-along period from zero
+ 179           * For a maximum voltage(MAX_VOLT) and a 32-element array,
+C51 COMPILER V9.01   MAIN                                                                  07/11/2018 20:04:02 PAGE 4   
+
+ 180           * increase 256/32=8 each time
+ 181           * Result should multi (voltage/MAX_VOLT) for voltage-adjusting
+ 182           */
+ 183          void genSaw() {
+ 184   1          for(i = 0; i < WAVE_SIZE; i++) {
+ 185   2              waveForm[i] = i*(255/WAVE_SIZE)*(voltage/MAX_VOLT);
+ 186   2          }
+ 187   1      }
+ 188          
+ 189          /*
+ 190           * Sin wave calculating takes a lot of time so here
+ 191           * use a preset table to index sin wave forms
+ 192           * Only need to multi voltage adjusting value
+ 193           */
+ 194          void genSin() {
+ 195   1          for(i = 0; i < WAVE_SIZE; i++) {
+ 196   2              waveForm[i] = sin[i]*(voltage/MAX_VOLT);
+ 197   2          }
+ 198   1      }
+ 199          
+ 200          /*
+ 201           * Square waves are quite simple to calculate
+ 202           * During the first half period, the output is maximum value
+ 203           * and on the last half period it is zero (zero ignoring voltage adjusting) 
+ 204           */
+ 205          void genSqr() {
+ 206   1          for(i = 0; i < WAVE_SIZE/2; i++) {
+ 207   2              waveForm[i] = (255)*(voltage/MAX_VOLT);
+ 208   2          }
+ 209   1          for(i = WAVE_SIZE/2; i < WAVE_SIZE; i++) {
+ 210   2              waveForm[i] = 0;
+ 211   2          }
+ 212   1      }
+ 213          
+ 214          /*
+ 215           * Triangle waves increase in the first half period and decrease in the last
+ 216           * half period. (Tested) There is a half-WAVE_SIZE offset in the value, so
+ 217           * use algo to compensate the offset
+ 218           */
+ 219          void genTri() {
+ 220   1          for(i = 0; i < WAVE_SIZE/2; i++) {
+ 221   2              waveForm[i] = (WAVE_SIZE/2 + i*(255/WAVE_SIZE*2))*(voltage/MAX_VOLT);
+ 222   2          }
+ 223   1          for(i = WAVE_SIZE/2; i < WAVE_SIZE; i++) {
+ 224   2              waveForm[i] = 255*(voltage/MAX_VOLT) - waveForm[i - WAVE_SIZE/2];
+ 225   2          }
+ 226   1      }
+ 227          
+ 228          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =    998    ----
    CONSTANT SIZE    =   ----    ----
-C51 COMPILER V9.01   MAIN                                                                  07/11/2018 18:59:31 PAGE 4   
-
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =     80    ----

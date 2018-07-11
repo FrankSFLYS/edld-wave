@@ -1,77 +1,82 @@
-/********引用的头文件*******/
-#include <reg52.h>   //开发51单片机必须包含的头文件,该文件定义了89c52单片机内部寄存器的地址
-#include "pcf8591.h" //pcf8591.h文件声明了pcf8591.c文件里边的操作函数,如果主函数要调用操作函数,则需包含此头文件
-#include <intrins.h> //包含NOP空指令函数_nop_();
-/***********宏定义**********/
+/**********************************************************************
+@Author: frank.xin
+@Date  : 7/11/2018
+File name : pcf8591.c
+File target: STC89C52 with PCF8591 ADDA Converter
+Approach  : Control-sequence of PCF8591 converter
+Sending sequence of I2C
+Data on sda is sent at negedge of scl
+http://frank.xin
+**********************************************************************/
+#include <reg52.h>  
+#include "pcf8591.h"
+#include <intrins.h>
+
 #define uchar unsigned char
 #define uint  unsigned int
-#define AddWr 0x90   //写数据地址 
-#define AddRd 0x91   //读数据地址
+#define AddWr 0x90   // ADDRESS BYTE
 
-/********硬件接口定义*******/
-sbit     Sda=P2^0;      //I2C  时钟 
-sbit     Scl=P2^1;      //I2C  数据 
 
-/*------------------------------------------------
-                    启动IIC总线
-------------------------------------------------*/
+sbit sda = P2^0;      //I2C Data pin
+sbit scl = P2^1;      //I2C Clock pin
+
+// Start I2C bus by sending an UP-DOWN singal
 void Start(void)
 {
-    Sda=1;
+    sda=1;
     _nop_();
-    Scl=1;
+    scl=1;
     _nop_();
-    Sda=0;
+    sda=0;
     _nop_();
-    Scl=0;
+    scl=0;
 }
 
-/*------------------------------------------------
-                   应答IIC总线
-------------------------------------------------*/
+// Acknoledge signal, that is, a zero bit
 void Ack(void)
 {
-    Sda=0;
+    sda=0;
     _nop_();
-    Scl=1;
+    scl=1;
     _nop_();
-    Scl=0;
+    scl=0;
     _nop_();
 }
 
-/*------------------------------------------------
-              发送一个字节
-------------------------------------------------*/
+// Send a byte
 void Send(unsigned char Data)
 { 
-    unsigned char BitCounter=8;
+    unsigned char bitCounter = 8;
     unsigned char temp;
 
     do {
-        temp=Data;
-        Scl=0;
+        temp = Data;    // Send a byte bit by bit
+        scl = 0;        // Pull down scl pin to put data and hold
         _nop_();
-        if((temp&0x80)==0x80)
-            Sda=1;
-        else
-            Sda=0;
-
-        Scl=1;
-        temp=Data<<1;
-        Data=temp;
-        BitCounter--;
-    } while(BitCounter);
-    Scl=0;
+        if((temp&0x80) == 0x80) {// MSB == 1 ?
+            sda = 1;
+        } else {
+            sda = 0;
+        }
+        scl = 1;        // Hold for long till next falling edge
+        temp = Data << 1; // move next for next MSB
+        Data = temp;
+        bitCounter--;
+    } while(bitCounter);
+    scl = 0;    // The last bit in falling edge
 }
 
+// Start DAC by sending ADDRESS and CONTROL bytes
 void DACStart() {
     Start();
-    Send(AddWr); //写入芯片地址
+    Send(AddWr);    // Send ADDRESS
     Ack();
-    Send(0x40);  //写入控制位，使能DAC输出
+    Send(0x40);     // Send CONTROL
     Ack();
 }
 
+// Combined with DACStart(), alway call after DACStart() is called
+// Send a byte of data
 void ContinuesSend(unsigned char Data) {
     Send(Data);
     Ack();

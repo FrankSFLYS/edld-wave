@@ -1,6 +1,12 @@
+/**********************************************************************
+@Author: frank.xin
+@Date  : 7/11/2018
+File name : key.h
+http://frank.xin
+**********************************************************************/
 #ifndef _KEY_H_
-
 #define _KEY_H_
+
 #define KEY_ONOFF    16
 #define KEY_NULL      0
 #define KEY_FRE_R_ADD 1
@@ -18,21 +24,6 @@
 
 #include <reg52.h>
 
-sbit _KEY_H_K1  = P3^4;
-
-sbit _KEY_H_kr0 = P3^0;
-sbit _KEY_H_kr1 = P3^1;
-sbit _KEY_H_kr2 = P3^2;
-sbit _KEY_H_kr3 = P3^3;
-
-sbit _KEY_H_kc0 = P3^4;
-sbit _KEY_H_kc1 = P3^5;
-sbit _KEY_H_kc2 = P3^6;
-sbit _KEY_H_kc3 = P3^7;
-
-//void keyInit(int *);
-//int keyScan();
 int mKeyScan();
-//void EnterSettingsMode() interrupt 0;
 
 #endif

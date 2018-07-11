@@ -1,26 +1,20 @@
+/**********************************************************************
+@Author: frank.xin
+@Date  : 7/11/2018
+File name : timer.c
+File target: STC89C52 with PCF8591 ADDA Converter
+Approach  : Initializing timer0 and start working
+http://frank.xin
+**********************************************************************/
 #include "timer.h"
 #include <reg52.h>
 
-/*------------------------------------------------
-                    初始化定时器1
-------------------------------------------------*/
-// void Init_Timer1(void)
-// {
-// 	TMOD = 0x10;		//设置定时器模式
-// 	TL1 = (65536-7)%256;		// 1ms
-// 	TH1 = (65536-7)/256;
-// 	TF1 = 0;		//清除TF1标志
-//     ET1 = 1;
-//     EA  = 1;
-// 	TR1 = 1;		//定时器1开始计时
-// }
-
 void Init_Timer0(void) {
-    TMOD = 0x01;		//设置定时器模式
-	TL0 = (65536-251)%256;      // 200 Hz for sin wave
-	TH0 = (65536-251)/256;      // 200 Hz for sin wave
-	TF0 = 0;		//清除TF0标志
-    ET0 = 1;
-    EA  = 1;
-	TR0 = 1;		//定时器0开始计时
+    TMOD = 0x01;		  // Set timer mod as 16-bit with non-reloading
+	TL0 = (65536-251)%256; // Period of first timing
+	TH0 = (65536-251)/256; // Period of first timing
+	TF0 = 0;        // Clear flow remark
+    ET0 = 1;        // Enable timer0 interrupt
+    EA  = 1;        // Enable global interrupt
+	TR0 = 1;		// Start timing
 }
