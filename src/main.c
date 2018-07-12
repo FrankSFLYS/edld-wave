@@ -18,7 +18,7 @@ http://frank.xin
 // also used in calculating waves
 #define WAVE_SIZE 32
 // maximum voltage output
-#define MAX_VOLT ((float)5.0)
+#define MAX_VOLT ((float)5.0) 
 // default timer reloading value
 #define DEFAULT_TL (65536-251)%256
 #define DEFAULT_TH (65536-251)/256
@@ -57,7 +57,7 @@ void (*generater)(void);
 // Table of sin wave
 unsigned char sin[] = {
     // Uncomment this line below when WAVE_SIZE==16
-    //128,176,218,245,255,245,218,176,128,79,37,10,0,10,37,79
+    // 128,176,218,245,255,245,218,176,128,79,37,10,0,10,37,79
     // Comment the lines below when WAVE_SIZE==16
     128, 152, 176, 198, 218, 234, 245, 253,
     255, 253, 245, 234, 218, 198, 176, 152,
@@ -81,7 +81,7 @@ void init() {
     DACStart();         // Send the ADDRESS and CONTROL bytes to PCF8591
     P1 = 0xfe;          // Light on LED 0
     voltage = 5.0;      // Maximum initial voltage output
-    initValue = 251;    // (Tested) Under this value, the frequency is 100Hz
+    initValue = 2000;    // (Tested) Under this value, the frequency is 100Hz
     tlValue = (65536-initValue)%256; // Reloading value of Timer
     thValue = (65536-initValue)/256; // Reloading value of Timer
     generater = genSin; // Function pointer pointing to genSin()
@@ -180,7 +180,7 @@ void onTimer0() interrupt 1 {
  * increase 256/32=8 each time
  * Result should multi (voltage/MAX_VOLT) for voltage-adjusting
  */
-void genSaw() {
+void genSaw() { // 32
     for(i = 0; i < WAVE_SIZE; i++) {
         waveForm[i] = i*(255/WAVE_SIZE)*(voltage/MAX_VOLT);
     }

@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   KEY                                                                   07/11/2018 20:04:02 PAGE 1   
+C51 COMPILER V9.01   KEY                                                                   07/12/2018 10:33:24 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE KEY
@@ -7,116 +7,114 @@ COMPILER INVOKED BY: G:\Keil\k4\C51\BIN\C51.EXE src\key.c BROWSE DEBUG OBJECTEXT
 
 line level    source
 
-   1          #include "key.h"
-   2          #include "delay.h"
-   3          
-   4          unsigned char _KEY_H_key;
-   5          unsigned char _KEY_H_temp;
-   6          // int* InSettingsMode;
-   7          
-   8          // void keyInit(int* settings) {
-   9          // //   Init_EXTI();
-  10          //      InSettingsMode = settings;
-  11          //      _KEY_H_K1 = 1;
-  12          // //   P3 = 0x0F;
-  13          // }
-  14          
-  15          // int keyScan() {
-  16          //      if(_KEY_H_K1 == 0) {
-  17          //              while(_KEY_H_K1 == 0);
-  18          //              return 1;
-  19          //      } else {
-  20          //              return 0;
-  21          //      }
-  22          // }
-  23          
-  24          int mKeyScan() {
-  25   1              _KEY_H_key = KEY_NULL;
-  26   1              P3=0xfe;
-  27   1          _KEY_H_temp=P3;
-  28   1          _KEY_H_temp=_KEY_H_temp&0xf0;
-  29   1          if(_KEY_H_temp!=0xf0) {
-  30   2            delay(10);
-  31   2            if(_KEY_H_temp!=0xf0) {
-  32   3              _KEY_H_temp=P3;
+   1          /**********************************************************************
+   2          @Author: frank.xin
+   3          @Date  : 7/11/2018
+   4          File name : key.c
+   5          File target: STC89C52 with PCF8591 ADDA Converter
+   6          Approach  : To scan key matrix and return specified keycode
+   7          http://frank.xin
+   8          **********************************************************************/
+   9          #include "key.h"
+  10          #include "delay.h"
+  11          
+  12          // storing keycode
+  13          unsigned char _KEY_H_key;
+  14          // get temporary matrix info
+  15          unsigned char _KEY_H_temp;
+  16          
+  17          /*
+  18           * Scaning key matrix (key matrix connected to P3, with 4x4 keys)
+  19           * Scan P3 row by row, whenever a pin is pulled down, start scan the
+  20           * row column by column.
+  21           */
+  22          int mKeyScan() {
+  23   1              _KEY_H_key = KEY_NULL;  // if no keys pressed, return KEY_NULL
+  24   1      
+  25   1              // Start scaning S1~S4
+  26   1              P3 = 0xfe;
+  27   1          _KEY_H_temp = P3;
+  28   1          _KEY_H_temp = _KEY_H_temp & 0xf0;   // Check down-pulling in P3.7~P3.4
+  29   1          if(_KEY_H_temp != 0xf0) {   // Pulling down in P3
+  30   2            delay(10);                                // In case of noise
+  31   2            if(_KEY_H_temp != 0xf0) {
+  32   3              _KEY_H_temp = P3;               // Get which pin
   33   3              switch(_KEY_H_temp) {
-  34   4                              case 0xee: _KEY_H_key = KEY_SIN; break;
+  34   4                              case 0xee: _KEY_H_key = KEY_SIN; break; // Pulling down on P3.4(and P3.0)
   35   4                              case 0xde: _KEY_H_key = KEY_SQR; break;
   36   4                              case 0xbe: _KEY_H_key = KEY_TRI; break;
   37   4                              case 0x7e: _KEY_H_key = KEY_SAW; break;
   38   4              }
-  39   3              while(_KEY_H_temp!=0xf0) {
-  40   4                              _KEY_H_temp=P3;
-  41   4                              _KEY_H_temp=_KEY_H_temp&0xf0;
+  39   3              while(_KEY_H_temp != 0xf0) {    // Wait untill the key is released
+  40   4                              _KEY_H_temp = P3;
+  41   4                              _KEY_H_temp = _KEY_H_temp & 0xf0;
   42   4                      }
   43   3            }
   44   2          }
-  45   1          P3=0xfd;
-  46   1          _KEY_H_temp=P3;
-  47   1          _KEY_H_temp=_KEY_H_temp&0xf0;
-  48   1          if(_KEY_H_temp!=0xf0) {
-  49   2                      delay(10);
-  50   2                      if(_KEY_H_temp!=0xf0) {
-  51   3                              _KEY_H_temp=P3;
-  52   3                              switch(_KEY_H_temp) {
-  53   4                              case 0xed: _KEY_H_key = KEY_FRE_R_ADD; break;
-  54   4                              case 0xdd: _KEY_H_key = KEY_FRE_A_ADD; break;
-  55   4                              case 0xbd: _KEY_H_key = KEY_AMP_R_ADD; break;
-C51 COMPILER V9.01   KEY                                                                   07/11/2018 20:04:02 PAGE 2   
+  45   1              // Start scaning S5~S7
+  46   1          P3 = 0xfd;
+  47   1          _KEY_H_temp = P3;
+  48   1          _KEY_H_temp = _KEY_H_temp & 0xf0;
+  49   1          if(_KEY_H_temp != 0xf0) {
+  50   2                      delay(10);
+  51   2                      if(_KEY_H_temp != 0xf0) {
+  52   3                              _KEY_H_temp = P3;
+  53   3                              switch(_KEY_H_temp) {
+  54   4                              case 0xed: _KEY_H_key = KEY_FRE_R_ADD; break;
+  55   4                              case 0xdd: _KEY_H_key = KEY_FRE_A_ADD; break;
+C51 COMPILER V9.01   KEY                                                                   07/12/2018 10:33:24 PAGE 2   
 
-  56   4                              case 0x7d: _KEY_H_key = KEY_AMP_A_ADD; break;
-  57   4                              } 
-  58   3                              while(_KEY_H_temp!=0xf0) {
-  59   4                                      _KEY_H_temp=P3;
-  60   4                                      _KEY_H_temp=_KEY_H_temp&0xf0;
-  61   4                              }
-  62   3                      }
-  63   2              }
-  64   1          P3=0xfb;
-  65   1          _KEY_H_temp=P3;
-  66   1          _KEY_H_temp=_KEY_H_temp&0xf0;
-  67   1          if(_KEY_H_temp!=0xf0) {
-  68   2                      delay(10);
-  69   2                      if(_KEY_H_temp!=0xf0) {
-  70   3                              _KEY_H_temp=P3;
-  71   3                              switch(_KEY_H_temp) {
-  72   4                                      case 0xeb: _KEY_H_key = KEY_FRE_R_SUB; break;
-  73   4                                      case 0xdb: _KEY_H_key = KEY_FRE_A_SUB; break;
-  74   4                                      case 0xbb: _KEY_H_key = KEY_AMP_R_SUB; break;
-  75   4                                      case 0x7b: _KEY_H_key = KEY_AMP_A_SUB; break;
-  76   4                              }
-  77   3                              while(_KEY_H_temp!=0xf0) {
-  78   4                                      _KEY_H_temp=P3;
-  79   4                                      _KEY_H_temp=_KEY_H_temp&0xf0;
-  80   4                              }
-  81   3                      }
-  82   2              }
-  83   1          P3=0xf7;
-  84   1          _KEY_H_temp=P3;
-  85   1          _KEY_H_temp=_KEY_H_temp&0xf0;
-  86   1          if(_KEY_H_temp!=0xf0) {
-  87   2                      delay(10);
-  88   2                      if(_KEY_H_temp!=0xf0) {
-  89   3                              _KEY_H_temp=P3;
-  90   3                              switch(_KEY_H_temp) {
-  91   4                              case 0xe7: _KEY_H_key = KEY_ONOFF; break;
-  92   4                              case 0xd7: _KEY_H_key = KEY_ONOFF; break;
-  93   4                              case 0xb7: _KEY_H_key = KEY_ONOFF; break;
-  94   4                              case 0x77: _KEY_H_key = KEY_ONOFF; break;
-  95   4                              }
-  96   3                              while(_KEY_H_temp!=0xf0) {
-  97   4                                      _KEY_H_temp=P3;
-  98   4                                      _KEY_H_temp=_KEY_H_temp&0xf0;
-  99   4                              }                       
- 100   3                      }
- 101   2          }
- 102   1              return _KEY_H_key;
- 103   1      }
- 104          
- 105          // void EnterSettingsMode() interrupt 0 {
- 106          //      EA = 0;
- 107          //      *InSettingsMode = 1;
- 108          // }
+  56   4                              case 0xbd: _KEY_H_key = KEY_AMP_R_ADD; break;
+  57   4                              case 0x7d: _KEY_H_key = KEY_AMP_A_ADD; break;
+  58   4                              } 
+  59   3                              while(_KEY_H_temp != 0xf0) {
+  60   4                                      _KEY_H_temp = P3;
+  61   4                                      _KEY_H_temp = _KEY_H_temp & 0xf0;
+  62   4                              }
+  63   3                      }
+  64   2              }
+  65   1              // Start scaning S8~S12
+  66   1          P3 = 0xfb;
+  67   1          _KEY_H_temp = P3;
+  68   1          _KEY_H_temp = _KEY_H_temp & 0xf0;
+  69   1          if(_KEY_H_temp != 0xf0) {
+  70   2                      delay(10);
+  71   2                      if(_KEY_H_temp != 0xf0) {
+  72   3                              _KEY_H_temp = P3;
+  73   3                              switch(_KEY_H_temp) {
+  74   4                                      case 0xeb: _KEY_H_key = KEY_FRE_R_SUB; break;
+  75   4                                      case 0xdb: _KEY_H_key = KEY_FRE_A_SUB; break;
+  76   4                                      case 0xbb: _KEY_H_key = KEY_AMP_R_SUB; break;
+  77   4                                      case 0x7b: _KEY_H_key = KEY_AMP_A_SUB; break;
+  78   4                              }
+  79   3                              while(_KEY_H_temp != 0xf0) {
+  80   4                                      _KEY_H_temp = P3;
+  81   4                                      _KEY_H_temp = _KEY_H_temp & 0xf0;
+  82   4                              }
+  83   3                      }
+  84   2              }
+  85   1              // Start scaning S13~S15
+  86   1          P3 = 0xf7;
+  87   1          _KEY_H_temp = P3;
+  88   1          _KEY_H_temp = _KEY_H_temp & 0xf0;
+  89   1          if(_KEY_H_temp != 0xf0) {
+  90   2                      delay(10);
+  91   2                      if(_KEY_H_temp != 0xf0) {
+  92   3                              _KEY_H_temp = P3;
+  93   3                              switch(_KEY_H_temp) {
+  94   4                              case 0xe7: _KEY_H_key = KEY_ONOFF; break;
+  95   4                              case 0xd7: _KEY_H_key = KEY_ONOFF; break;
+  96   4                              case 0xb7: _KEY_H_key = KEY_ONOFF; break;
+  97   4                              case 0x77: _KEY_H_key = KEY_ONOFF; break;
+  98   4                              }
+  99   3                              while(_KEY_H_temp != 0xf0) {
+ 100   4                                      _KEY_H_temp = P3;
+ 101   4                                      _KEY_H_temp = _KEY_H_temp & 0xf0;
+ 102   4                              }                       
+ 103   3                      }
+ 104   2          }
+ 105   1              return _KEY_H_key;
+ 106   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
@@ -126,10 +124,10 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    PDATA SIZE       =   ----    ----
    DATA SIZE        =      2    ----
    IDATA SIZE       =   ----    ----
-C51 COMPILER V9.01   KEY                                                                   07/11/2018 20:04:02 PAGE 3   
-
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
+
+C51 COMPILER V9.01   KEY                                                                   07/12/2018 10:33:24 PAGE 3   
 
 
 C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

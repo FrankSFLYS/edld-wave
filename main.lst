@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   MAIN                                                                  07/11/2018 20:04:02 PAGE 1   
+C51 COMPILER V9.01   MAIN                                                                  07/12/2018 10:33:24 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
@@ -27,7 +27,7 @@ line level    source
   18          // also used in calculating waves
   19          #define WAVE_SIZE 32
   20          // maximum voltage output
-  21          #define MAX_VOLT ((float)5.0)
+  21          #define MAX_VOLT ((float)5.0) 
   22          // default timer reloading value
   23          #define DEFAULT_TL (65536-251)%256
   24          #define DEFAULT_TH (65536-251)/256
@@ -62,13 +62,13 @@ line level    source
   53          float voltage;
   54          // function pointer, point to genWaves(), for brief calling
   55          void (*generater)(void);
-C51 COMPILER V9.01   MAIN                                                                  07/11/2018 20:04:02 PAGE 2   
+C51 COMPILER V9.01   MAIN                                                                  07/12/2018 10:33:24 PAGE 2   
 
   56          
   57          // Table of sin wave
   58          unsigned char sin[] = {
   59              // Uncomment this line below when WAVE_SIZE==16
-  60              //128,176,218,245,255,245,218,176,128,79,37,10,0,10,37,79
+  60              // 128,176,218,245,255,245,218,176,128,79,37,10,0,10,37,79
   61              // Comment the lines below when WAVE_SIZE==16
   62              128, 152, 176, 198, 218, 234, 245, 253,
   63              255, 253, 245, 234, 218, 198, 176, 152,
@@ -92,7 +92,7 @@ line level    source
   81   1          DACStart();         // Send the ADDRESS and CONTROL bytes to PCF8591
   82   1          P1 = 0xfe;          // Light on LED 0
   83   1          voltage = 5.0;      // Maximum initial voltage output
-  84   1          initValue = 251;    // (Tested) Under this value, the frequency is 100Hz
+  84   1          initValue = 2000;    // (Tested) Under this value, the frequency is 100Hz
   85   1          tlValue = (65536-initValue)%256; // Reloading value of Timer
   86   1          thValue = (65536-initValue)/256; // Reloading value of Timer
   87   1          generater = genSin; // Function pointer pointing to genSin()
@@ -126,7 +126,7 @@ line level    source
  115   3                      break;
  116   3                  case KEY_FRE_R_SUB: // Rough sub frequency
  117   3                      initValue += FREQUENCY_STEP_R;
-C51 COMPILER V9.01   MAIN                                                                  07/11/2018 20:04:02 PAGE 3   
+C51 COMPILER V9.01   MAIN                                                                  07/12/2018 10:33:24 PAGE 3   
 
  118   3                      break;
  119   3                  case KEY_FRE_A_ADD: // Accurate add frequency
@@ -190,12 +190,12 @@ line level    source
  177           * Generating sawtooth wave
  178           * Sawtooth wave increases in all-along period from zero
  179           * For a maximum voltage(MAX_VOLT) and a 32-element array,
-C51 COMPILER V9.01   MAIN                                                                  07/11/2018 20:04:02 PAGE 4   
+C51 COMPILER V9.01   MAIN                                                                  07/12/2018 10:33:24 PAGE 4   
 
  180           * increase 256/32=8 each time
  181           * Result should multi (voltage/MAX_VOLT) for voltage-adjusting
  182           */
- 183          void genSaw() {
+ 183          void genSaw() { // 32
  184   1          for(i = 0; i < WAVE_SIZE; i++) {
  185   2              waveForm[i] = i*(255/WAVE_SIZE)*(voltage/MAX_VOLT);
  186   2          }
@@ -244,7 +244,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    998    ----
+   CODE SIZE        =    999    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
