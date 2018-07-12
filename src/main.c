@@ -81,7 +81,7 @@ void init() {
     DACStart();         // Send the ADDRESS and CONTROL bytes to PCF8591
     P1 = 0xfe;          // Light on LED 0
     voltage = 5.0;      // Maximum initial voltage output
-    initValue = 2000;    // (Tested) Under this value, the frequency is 100Hz
+    initValue = 251;    // (Tested) Under this value, the frequency is 100Hz
     tlValue = (65536-initValue)%256; // Reloading value of Timer
     thValue = (65536-initValue)/256; // Reloading value of Timer
     generater = genSin; // Function pointer pointing to genSin()
