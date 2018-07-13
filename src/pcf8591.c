@@ -59,7 +59,7 @@ void Send(unsigned char Data)
             sda = 0;
         }
         scl = 1;        // Hold for long till next falling edge
-        temp = Data << 1; // move next for next MSB
+        temp = Data << 1; // move left for a next MSB
         Data = temp;
         bitCounter--;
     } while(bitCounter);

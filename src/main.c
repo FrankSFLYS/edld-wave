@@ -213,8 +213,8 @@ void genSqr() {
 
 /*
  * Triangle waves increase in the first half period and decrease in the last
- * half period. (Tested) There is a half-WAVE_SIZE offset in the value, so
- * use algo to compensate the offset
+ * half period. (Tested) There is a half-WAVE_SIZE offset in the first value,
+ * so use algo to compensate the offset, that is how the WAVE_SIZE/2 + comes.
  */
 void genTri() {
     for(i = 0; i < WAVE_SIZE/2; i++) {
