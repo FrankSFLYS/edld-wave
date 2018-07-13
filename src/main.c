@@ -43,6 +43,8 @@ void genSqr();
 unsigned char index;
 // used in for loops
 unsigned char i;
+// indicates whether there is DA output
+bit hasStart;
 // storing keycode
 unsigned char keyCode;
 // initValue of Timer
@@ -77,15 +79,16 @@ volatile unsigned char waveForm[WAVE_SIZE];
  * generater (function pointer, for calculating waveForm[])
  */
 void init() {
-    Init_Timer0();      // Enable Interrupt
-    DACStart();         // Send the ADDRESS and CONTROL bytes to PCF8591
     P1 = 0xfe;          // Light on LED 0
     voltage = 5.0;      // Maximum initial voltage output
+	hasStart = 1;
     initValue = 251;    // (Tested) Under this value, the frequency is 100Hz
     tlValue = (65536-initValue)%256; // Reloading value of Timer
     thValue = (65536-initValue)/256; // Reloading value of Timer
     generater = genSin; // Function pointer pointing to genSin()
-    generater();        // Call function pointer (genSin() here)
+    generater();        // Call function pointer (genSin() here)		
+    DACStart();         // Send the ADDRESS and CONTROL bytes to PCF8591
+	Init_Timer0();      // Enable Interrupt
 }
 // main entrance
 void main() {
@@ -97,6 +100,7 @@ void main() {
             case KEY_NULL:      // No key pressed (or invalied key)
                 break;
             case KEY_ONOFF:     // Display controlling (not used)
+				hasStart = !hasStart;
                 break;
             case KEY_SIN:       // Switch to sin wave
                 generater = genSin; // Function pointer, ready to call
@@ -159,18 +163,19 @@ void main() {
 void onTimer0() interrupt 1 {
 	TL0 = tlValue;   // Reload timer values
 	TH0 = thValue;   // Reload timer values
-
-    index ++;   // Increase index, indexing next element in waveForm[]
-    if(index == WAVE_SIZE) {    // Array out range
-        index = 0;
-    }
-    /*
-     * Send next data into DAC
-     * Connection already set up by calling DACStart()
-     * According to documentation, there can be unlimited
-     * data sent to DAC
-     */
-    ContinuesSend(waveForm[index]);
+	if (hasStart) {
+	    index ++;   // Increase index, indexing next element in waveForm[]
+	    if(index == WAVE_SIZE) {    // Array out range
+	        index = 0;
+	    }
+	    /*
+	     * Send next data into DAC
+	     * Connection already set up by calling DACStart()
+	     * According to documentation, there can be unlimited
+	     * data sent to DAC
+	     */
+	    ContinuesSend(waveForm[index]);
+	}
 }
 
 /*
